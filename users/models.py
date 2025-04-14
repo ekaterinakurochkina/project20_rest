@@ -14,7 +14,7 @@ class User(AbstractUser):
 
     city = models.CharField(max_length=50, verbose_name="Город", blank=True, null=True,
                              help_text="Введите название города")
-    token = models.CharField(max_length=100, verbose_name="Token", blank=True, null=True)
+
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -26,7 +26,5 @@ class User(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
         ordering = ['email']
-        permissions = [
-            ('can_inactivate', 'Can inactivate')
-        ]
+
 
