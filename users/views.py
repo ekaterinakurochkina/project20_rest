@@ -1,9 +1,17 @@
-from django.shortcuts import render
-from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
-from rest_framework.viewsets import ModelViewSet
+import secrets
 
-from materials.models import Course
+from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
+
+# from config.settings import EMAIL_HOST_USER
+from users.forms import UserRegisterForm, UserUpdateForm
 from users.models import Payments
+from users.models import User
 from users.serializer import PaymentsSerializer
 
 
@@ -32,29 +40,9 @@ class PaymentsDestroyApiView(DestroyAPIView):
     serializer_class = PaymentsSerializer
 
 
-
-import secrets
-
-from django.contrib.auth import logout
-from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
-from django.core.mail import send_mail
-from django.shortcuts import redirect, get_object_or_404
-from django.urls import reverse
-from django.urls import reverse_lazy
-from django.views.generic import ListView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
-
-# from config.settings import EMAIL_HOST_USER
-from users.forms import UserRegisterForm, UserUpdateForm
-from users.models import User
-
-
 def logout_view(request):
     logout(request)
     return redirect('mailing:home')
-
 
 
 class UserListView(LoginRequiredMixin, ListView):
