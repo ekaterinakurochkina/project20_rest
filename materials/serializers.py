@@ -8,7 +8,8 @@ class CourseSerializer(ModelSerializer):
     lessons = serializers.SerializerMethodField()
 
     def get_lessons(self, course):
-        return course.lessons.count()
+        # return course.lessons.count()
+        return [course.lessons.name for les in Lesson.objects.filter(course=course)]
 
     class Meta:
         model = Course
