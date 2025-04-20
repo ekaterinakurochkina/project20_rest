@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -37,10 +35,11 @@ class Payments(models.Model):
     payment_date = models.DateTimeField(verbose_name="Дата оплаты", auto_now_add=True, help_text="Введите дату оплаты",
                                         null=False, blank=True)
     payment_course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Оплаченный курс",
-                                       help_text="Оплаченный курс")
+                                       help_text="Оплаченный курс", null=True, blank=True)
     payment_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name="Оплаченный урок",
-                                       help_text="Оплаченный урок")
-    payment_amount = models.PositiveIntegerField(verbose_name="Сумма оплаты", help_text="Сумма оплаты", null=False, blank=False)
+                                       help_text="Оплаченный урок", null=True, blank=True)
+    payment_amount = models.PositiveIntegerField(verbose_name="Сумма оплаты", help_text="Сумма оплаты", null=False,
+                                                 blank=False)
     PAYMENT_METHOD_CHOICES = [
         ('cash', 'Наличные'),
         ('transfer', 'Перевод'),
@@ -53,5 +52,3 @@ class Payments(models.Model):
         help_text="Выберите метод оплаты: наличные или перевод.",
         default='transfer'
     )
-
-
