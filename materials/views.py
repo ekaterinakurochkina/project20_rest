@@ -39,19 +39,3 @@ class LessonUpdateApiView(UpdateAPIView):
 class LessonDestroyApiView(DestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-
-
-# class CommentViewSet(viewsets.ModelViewSet):
-#     queryset = Comment.objects.all()
-#     serializer_class = CommentSerializer
-#
-#     def get_queryset(self):
-#         queryset = super().get_queryset()
-#         if self.request.query_params.get('pk'):
-#             queryset = queryset.filter(article_id=int(self.request.query_params.get('pk')))
-#
-#         return queryset
-#
-#     def create(self, request, *args, **kwargs):
-#         self.serializer_class = CommentCreateSerializer
-#         return super().create(request, *args, **kwargs)

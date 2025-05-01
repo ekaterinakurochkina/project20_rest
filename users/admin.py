@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import User
+from .models import User, Payments
 
 
 @admin.register(User)
@@ -36,3 +36,11 @@ class MaterialsAdmin(UserAdmin):
     )
     ordering = ('pk', )
     readonly_fields = ("last_login", "date_joined")
+
+
+@admin.register(Payments)
+class PaymentsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'course', 'lesson', 'payment_date', 'payment_amount',
+                    'payment_method')
+    list_filter = ('id', 'user','course', 'lesson',)
+    search_fields = ('user',)
