@@ -6,12 +6,14 @@ from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from rest_framework import status
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
-
+from rest_framework.response import Response
 # from config.settings import EMAIL_HOST_USER
 from users.forms import UserRegisterForm, UserUpdateForm
 from users.models import Payments
 from users.models import User
+from materials.models import Course, Lesson
 from users.serializer import PaymentsSerializer
 
 
@@ -19,6 +21,18 @@ class PaymentsCreateApiView(CreateAPIView):
     queryset = Payments.objects.all()
     serializer_class = PaymentsSerializer
 
+    def create(self, request, *args, **kwargs):
+        course_id = request.data.get('course_id')
+        lesson_id = request.data.get('lesson_id')
+
+        if course_id:
+            course = Course.objects.get(id=course_id)
+            payment = Payments.objects.create(user=request.user, course=course)
+        elif lesson_id:
+            lesson = Lesson.objects.get(id=lesson_id)
+            payment = Payments.objects.create(user=request.user, lesson=lesson)
+        else:
+            return Response({'error': 'Необходимо указать курс или урок'}, status=status.HTTP_400_BAD_REQUEST)
 
 class PaymentsListApiView(ListAPIView):
     queryset = Payments.objects.all()

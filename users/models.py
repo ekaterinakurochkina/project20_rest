@@ -1,3 +1,4 @@
+from django.db.models import CASCADE
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -31,7 +32,10 @@ class User(AbstractUser):
 
 class Payments(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Пользователь", help_text="Пользователь",
-                             blank=True, null=True, related_name='payments')
+                             blank=True, null=True, related_name='payment')
+    course = models.ForeignKey(Course, on_delete=CASCADE, null=True, blank=True, related_name="payment")
+    lesson = models.ForeignKey(Lesson, on_delete=CASCADE, null=True, blank=True, related_name="payment")
+
     payment_date = models.DateTimeField(verbose_name="Дата оплаты", auto_now_add=True, help_text="Введите дату оплаты",
                                         null=False, blank=True)
     payment_course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Оплаченный курс",
