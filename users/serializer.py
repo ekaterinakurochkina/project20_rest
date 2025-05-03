@@ -5,7 +5,7 @@ from rest_framework.serializers import ModelSerializer, Serializer
 
 from django.db import models
 from materials.models import Course, Lesson
-from users.models import Payments
+from users.models import Payments, User
 
 
 # class PaymentsSerializer(ModelSerializer):
@@ -43,4 +43,8 @@ class PaymentsSerializer(serializers.ModelSerializer):
         return PaymentsSerializer(related_payments, many=True).data
 
 
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "email", "city")
 
