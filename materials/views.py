@@ -1,5 +1,5 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
 from materials.models import Course, Lesson
@@ -18,6 +18,8 @@ class CourseViewSet(ModelViewSet):
             self.permission_classes = (IsModer | IsOwner,)
         elif self.action == "destroy":
             self.permission_classes = (~IsModer | IsOwner,)
+        elif self.action == "list":
+            self.permission_classes = (AllowAny,)
         return super().get_permissions()
 
     def perform_create(self, serializer):
