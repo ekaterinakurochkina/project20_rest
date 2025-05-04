@@ -2,9 +2,10 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 from materials.models import Course, Lesson
+from materials.validators import VideoUrlValidator
 from users.serializer import PaymentsSerializer
 
-class LessonSerializer(ModelSerializer):
+class LessonSerializer(serializers.ModelSerializer):
     course = serializers.StringRelatedField()
     # course = CourseSerializer(read_only=True)
     payment = PaymentsSerializer(many=True, read_only=True)
@@ -12,6 +13,7 @@ class LessonSerializer(ModelSerializer):
     class Meta:
         model = Lesson
         fields = ("id", "name", "description", "preview", "video_url", "course", "payment")
+        video_url = serializers.CharField(validators=[VideoUrlValidator])
 
 class CourseSerializer(ModelSerializer):
     lessons = LessonSerializer(many=True, read_only=True)
