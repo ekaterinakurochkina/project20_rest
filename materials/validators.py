@@ -7,7 +7,8 @@ class VideoUrlValidator:
 		self.field = field
 
 	def __call__(self, value):
-		reg = re.compile('^[youtube.com]+$')
+		# reg = re.compile('^[youtube.com]+$')
+		reg = re.compile(r'^(https?://)?(www\.)?(youtube\.com|youtu\.?be)/.+$')
 		tmp_val = dict(value).get(self.field)
 		if not bool(reg.match(tmp_val)):
 			raise ValidationError('Video url is not ok')
