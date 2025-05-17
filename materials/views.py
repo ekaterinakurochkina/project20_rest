@@ -72,59 +72,35 @@ class LessonDestroyApiView(DestroyAPIView):
     # permission_classes = (IsAuthenticated, ~IsModer, IsOwner)
 
 
-# class SubscriptionApiView(CreateAPIView):
-#     queryset = Subscription.objects.all()
-#     serializer_class = SubscriptionSerializer
-#     permission_classes = (IsAuthenticated)
-#
-#     def post(self, *args, **kwargs):
-#         user = self.requests.course_id
-#         self.reqests.data
-#         course_item = получаем
-#
-#         # Если подписка у пользователя на этот курс есть - удаляем ее
-#         if subs_item.exists():
-#             ...
-#             message = 'подписка удалена'
-#         # Если подписки у пользователя на этот курс нет - создаем ее
-#         else:
-#             ...
-#             message = 'подписка добавлена'
-#         # Возвращаем ответ в API
-#         return Response({"message": message})
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-from .models import Subscription, Course  # Импортируйте ваши модели
-from .serializers import SubscriptionSerializer  # Импортируйте ваш сериализатор
+from .models import Subscription, Course
+from .serializers import SubscriptionSerializer
 
 
 class SubscriptionApiView(APIView):
-    permission_classes = [IsAuthenticated]  # Ограничьте доступ только для авторизованных пользователей
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        serializer = SubscriptionSerializer(data=request.data)  # Создаем экземпляр сериализатора с данными запроса
-        serializer.is_valid(raise_exception=True)  # Проверяем валидность данных
-
-        user = request.user  # Получаем пользователя из запроса
-        course_id = serializer.validated_data['course_id']  # Получаем ID курса из валидированных данных
-
-        # Получаем объект курса или возвращаем 404, если курс не найден
+        user = self.request.user
+        course_id = self.request.data.get("id")
         course_item = get_object_or_404(Course, id=course_id)
 
-        # Получаем подписку для текущего пользователя и курса
         subs_item = Subscription.objects.filter(user=user, course=course_item)
 
         # Если подписка у пользователя на этот курс есть - удаляем ее
         if subs_item.exists():
-            subs_item.delete()  # Удаляем подписку
-            message = 'Подписка удалена'
+            subs_item.delete()
+            message = "подписка удалена"
+            status_code = status.HTTP_200_OK
         # Если подписки у пользователя на этот курс нет - создаем ее
         else:
-            Subscription.objects.create(user=user, course=course_item, is_subscription=True)  # Создаем новую подписку
-            message = 'Подписка добавлена'
+            subs_item.create()
+            message = "подписка добавлена"
+            status_code = status.HTTP_201_CREATED
 
         # Возвращаем ответ в API
-        return Response({"message": message}, status=status.HTTP_200_OK)
+        return Response({"message": message}, status=status_code)

@@ -34,12 +34,15 @@ class Lesson(models.Model):
         verbose_name = "Урок"
         verbose_name_plural = "Уроки"
 
+
 class Subscription(models.Model):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, null=True, blank=True, verbose_name="Пользователь",
-                              help_text="Укажите пользователя", related_name='subscriber')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс", help_text="Выберите курс для подписки на обновления",
+                             help_text="Укажите пользователя", related_name='subscriber')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс",
+                               help_text="Выберите курс для подписки на обновления",
                                blank=True, null=True, related_name='subscription')
-    is_subscription = models.BooleanField(default=False, verbose_name="Подписка на обновления", help_text="Подпишитесь на обновления")
+    is_subscription = models.BooleanField(default=False, verbose_name="Подписка на обновления",
+                                          help_text="Подпишитесь на обновления")
 
     class Meta:
         verbose_name = "Подписка"
