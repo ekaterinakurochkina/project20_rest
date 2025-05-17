@@ -14,6 +14,9 @@ class Course(models.Model):
         verbose_name = "Курс"
         verbose_name_plural = "Курсы"
 
+    def __str__(self):
+        return self.name
+
 
 class Lesson(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название курса", help_text="Введите название курса")

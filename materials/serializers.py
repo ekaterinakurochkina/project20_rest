@@ -7,7 +7,7 @@ from users.serializer import PaymentsSerializer, UserSerializer
 
 
 class LessonSerializer(serializers.ModelSerializer):
-    course = serializers.StringRelatedField()
+    course = serializers.StringRelatedField(read_only=True)
     # course = CourseSerializer(read_only=True)
     payment = PaymentsSerializer(many=True, read_only=True)
 

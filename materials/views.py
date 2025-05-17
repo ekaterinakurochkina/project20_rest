@@ -2,8 +2,8 @@ from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, D
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
-from materials.models import Course, Lesson, Subscription
-from materials.serializers import CourseSerializer, LessonSerializer, SubscriptionSerializer
+from materials.models import Course, Lesson
+from materials.serializers import CourseSerializer, LessonSerializer
 from users.permissions import IsModer, IsOwner
 from .paginators import MaterialsPaginator
 
@@ -13,36 +13,38 @@ class CourseViewSet(ModelViewSet):
     serializer_class = CourseSerializer
     pagination_class = MaterialsPaginator
 
-    def get_permissions(self):
-        if self.action == "create":
-            self.permission_classes = (~IsModer,)
-        elif self.action in ["update", "retrieve"]:
-            self.permission_classes = (IsModer | IsOwner,)
-        elif self.action == "destroy":
-            self.permission_classes = (~IsModer | IsOwner,)
-        elif self.action == "list":
-            self.permission_classes = (AllowAny,)
-        return super().get_permissions()
+    # def get_permissions(self):
+    #     if self.action == "create":
+    #         self.permission_classes = (~IsModer,)
+    #     elif self.action in ["update", "retrieve"]:
+    #         self.permission_classes = (IsModer | IsOwner,)
+    #     elif self.action == "destroy":
+    #         self.permission_classes = (~IsModer | IsOwner,)
+    #     elif self.action == "list":
+    #         self.permission_classes = (AllowAny,)
+    #     return super().get_permissions()
 
     def perform_create(self, serializer):
         course = serializer.save()
         course.owner = self.request.user
         course.save()
 
+
 class LessonCreateApiView(CreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = (~IsModer, IsAuthenticated)
+    # permission_classes = (~IsModer, IsAuthenticated)
 
     def perform_create(self, serializer):
         lesson = serializer.save()
         lesson.owner = self.request.user
         lesson.save()
 
+
 class LessonListApiView(ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = (IsAuthenticated)
+    # permission_classes = (IsAuthenticated)
     pagination_class = MaterialsPaginator
 
     def get_queryset(self):
@@ -55,18 +57,20 @@ class LessonListApiView(ListAPIView):
 class LessonRetrieveApiView(RetrieveAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = (IsAuthenticated, IsModer | IsOwner)
+    # permission_classes = (IsAuthenticated, IsModer | IsOwner)
 
 
 class LessonUpdateApiView(UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = (IsAuthenticated, IsModer | IsOwner)
+    # permission_classes = (IsAuthenticated, IsModer | IsOwner)
+
 
 class LessonDestroyApiView(DestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = (IsAuthenticated, ~IsModer, IsOwner)
+    # permission_classes = (IsAuthenticated, ~IsModer, IsOwner)
+
 
 # class SubscriptionApiView(CreateAPIView):
 #     queryset = Subscription.objects.all()
@@ -96,6 +100,7 @@ from django.shortcuts import get_object_or_404
 from .models import Subscription, Course  # Импортируйте ваши модели
 from .serializers import SubscriptionSerializer  # Импортируйте ваш сериализатор
 
+
 class SubscriptionApiView(APIView):
     permission_classes = [IsAuthenticated]  # Ограничьте доступ только для авторизованных пользователей
 
@@ -123,4 +128,3 @@ class SubscriptionApiView(APIView):
 
         # Возвращаем ответ в API
         return Response({"message": message}, status=status.HTTP_200_OK)
-
