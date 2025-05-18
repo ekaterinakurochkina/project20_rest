@@ -8,8 +8,9 @@ from rest_framework.response import Response
 from materials.models import Course, Lesson
 # from config.settings import EMAIL_HOST_USER
 from users.models import Payments
-from users.models import User
-from users.serializer import PaymentsSerializer, UserSerializer
+from users.models import User, Donation
+from users.serializer import PaymentsSerializer, UserSerializer, DonationSerializer
+from users.services import convert_rub_to_dollars, create_stripe_price, create_stripe_session
 
 
 class PaymentsCreateApiView(CreateAPIView):
@@ -89,3 +90,18 @@ class UserRetrieveApiView(RetrieveAPIView):
 class UserDestroyApiView(DestroyAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+
+class DonationApiView(CreateAPIView):
+    serializer_class = DonationSerializer
+    queryset = Donation.objects.all()
+    permission_classes = (AllowAny,)  # открыли доступ к классу регистрации пользователя
+
+    def perform_create(self, serializer):
+        payment = serializer.save(user=self.request.user)
+        amount_in_dollars = convert_rub_to_dollars(payment.amount)
+        price = create_stripe_price(amount_in_dollars)
+        session_id, payment_link = create_stripe_session(price)
+        payment.session_id = session_id
+        payment.link = payment_link
+        payment.save()

@@ -1,15 +1,15 @@
 [
-{
-  "model": "auth.group",
-  "pk": 1,
-  "fields": {
-    "name": "moders",
-    "permissions": [
-      30,
-      32,
-      34,
-      36
-    ]
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "moders",
+      "permissions": [
+        30,
+        32,
+        34,
+        36
+      ]
+    }
   }
-}
 ]

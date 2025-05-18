@@ -14,6 +14,7 @@ djangorestframework==3.16.0
 djangorestframework_simplejwt==5.5.0
 drf-yasg==1.21.10
 executing==2.2.0
+forex-python==1.8
 idna==3.10
 imaplib2==3.6
 inflection==0.5.1
@@ -40,9 +41,12 @@ pytz==2025.2
 PyYAML==6.0.2
 requests==2.32.3
 setuptools==80.7.1
+simplejson==3.20.1
 sqlparse==0.5.3
 stack-data==0.6.3
+stripe==12.1.0
 traitlets==5.14.3
+typing_extensions==4.13.2
 uritemplate==4.1.1
 urllib3==2.4.0
 wcwidth==0.2.13
