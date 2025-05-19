@@ -42,6 +42,7 @@ class Payments(models.Model):
 
     payment_amount = models.PositiveIntegerField(verbose_name="Сумма оплаты", help_text="Сумма оплаты", null=False,
                                                  blank=False)
+
     PAYMENT_METHOD_CHOICES = [
         ('cash', 'Наличные'),
         ('transfer', 'Перевод'),
@@ -54,6 +55,8 @@ class Payments(models.Model):
         help_text="Выберите метод оплаты: наличные или перевод",
         default='transfer'
     )
+    session_id = models.CharField(max_length=255, verbose_name="id сессии", blank=True, null=True)
+    link = models.URLField(max_length=400, verbose_name="ссылка на оплату", blank=True, null=True)
 
     class Meta:
         verbose_name = 'Платеж'
@@ -61,37 +64,37 @@ class Payments(models.Model):
         ordering = ['user']
 
 
-class Donation(models.Model):
-    amount = models.PositiveIntegerField(
-        verbose_name="Сумма пожертвования",
-        help_text="Укажите сумму пожертвования",
-    )
-    session_id = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name="Id сессии",
-        help_text="Укажите Id сессии",
-    )
-    link = models.URLField(
-        max_length=400,
-        blank=True,
-        null=True,
-        verbose_name="Ссылка на оплату",
-        help_text="Укажите ссылку на оплату",
-    )
-    user = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        verbose_name="Пользователь",
-        help_text="Укажите пользователя",
-    )
-
-    class Meta:
-        verbose_name = 'Пожертвование'
-        verbose_name_plural = 'Пожертвования'
-
-    def __str__(self):
-        return self.amount
+# class Donation(models.Model):
+#     amount = models.PositiveIntegerField(
+#         verbose_name="Сумма пожертвования",
+#         help_text="Укажите сумму пожертвования",
+#     )
+#     session_id = models.CharField(
+#         max_length=255,
+#         blank=True,
+#         null=True,
+#         verbose_name="Id сессии",
+#         help_text="Укажите Id сессии",
+#     )
+#     link = models.URLField(
+#         max_length=400,
+#         blank=True,
+#         null=True,
+#         verbose_name="Ссылка на оплату",
+#         help_text="Укажите ссылку на оплату",
+#     )
+#     user = models.ForeignKey(
+#         User,
+#         on_delete=models.SET_NULL,
+#         blank=True,
+#         null=True,
+#         verbose_name="Пользователь",
+#         help_text="Укажите пользователя",
+#     )
+#
+#     class Meta:
+#         verbose_name = 'Пожертвование'
+#         verbose_name_plural = 'Пожертвования'
+#
+#     def __str__(self):
+#         return self.amount
