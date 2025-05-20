@@ -41,3 +41,42 @@ class MaterialsTestCase(APITestCase):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Lesson.objects.all().count(), 2)
+
+    def test_lesson_update(self):
+        """Тестирование обновления урока"""
+        url = reverse("materials:lessons_update", args=(self.lesson.pk,))
+        data = {"name": "Урок_New"}
+        response = self.client.patch(url, data)
+        data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(data.get("name"), "Урок_New")
+
+    def test_lesson_delete(self):
+        """Тестирование удаления урока"""
+        url = reverse("materials:lessons_delete", args=(self.lesson.pk,))
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Lesson.objects.all().count(), 0)
+
+    def test_lesson_list(self):
+        """Тестирование просмотра списка уроков"""
+        url = reverse("materials:lessons_list")
+        response = self.client.get(url)
+        data = response.json()
+        print(data)
+        result = data["results"]
+        print(result)
+        res = len(result[0])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(res, 6)
+
+    def test_subscription(self):
+        url = reverse("materials:subscription", args=(self.course.pk,))
+        data = {"id": 1, "is_subscription": True, "user": self.user.pk, "course": self.course.pk,
+                "course_id": self.course.pk}
+        print(data)
+
+        response = self.client.post(url, data)
+        print(response)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("message"), "подписка удалена")
