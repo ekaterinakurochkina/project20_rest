@@ -1,8 +1,7 @@
 import stripe
+from django.conf import settings
 
-from config.settings import STRIPE_API_KEY
-
-stripe.api_key = STRIPE_API_KEY
+stripe.api_key = settings.STRIPE_API_KEY
 
 
 def stripe_create_product(obj):
@@ -13,11 +12,8 @@ def stripe_create_product(obj):
 def create_stripe_price(obj, payment_amount):
     """Создает цену в страйпе"""
     return stripe.Price.create(
-        # currency="usd",
-        # unit_amount=amount * 100,  # т.к. на вход страйп получает центы
         currency="rub",
         unit_amount=payment_amount * 100,  # умножаем на 100, чтобы цена была в рублях, а не копейках
-        # recurring={"interval": "month"}, # периодичность платежа раз в месяц нам не нужна
         product_data={"name": obj.get("name")},
     )
 

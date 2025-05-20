@@ -16,7 +16,6 @@ class PaymentsCreateApiView(CreateAPIView):
 
     def perform_create(self, serializer):
         payment = serializer.save(user=self.request.user)
-        print(payment.course, payment.lesson)
         if payment.course is not None:
             product = stripe_create_product(payment.course.title)
         elif payment.lesson is not None:
@@ -26,7 +25,7 @@ class PaymentsCreateApiView(CreateAPIView):
         session_id, payment_link = create_stripe_price(price)
         payment.session_id = session_id
         payment.link = payment_link
-        payment.save()
+        payment.save(updated_fields=['session_id', 'link'])
 
 
 class PaymentsListApiView(ListAPIView):
