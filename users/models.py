@@ -1,4 +1,3 @@
-from django.db.models import CASCADE
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -30,18 +29,20 @@ class User(AbstractUser):
         ordering = ['email']
 
 
-
 class Payments(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Пользователь", help_text="Пользователь",
                              blank=True, null=True, related_name='payments')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True, related_name="payments", verbose_name="Оплаченный курс")
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, related_name="payments", verbose_name="Оплаченный урок")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True, related_name="payments",
+                               verbose_name="Оплаченный курс")
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, related_name="payments",
+                               verbose_name="Оплаченный урок")
 
     payment_date = models.DateTimeField(verbose_name="Дата оплаты", auto_now_add=True, help_text="Введите дату оплаты",
                                         null=False, blank=True)
 
     payment_amount = models.PositiveIntegerField(verbose_name="Сумма оплаты", help_text="Сумма оплаты", null=False,
                                                  blank=False)
+
     PAYMENT_METHOD_CHOICES = [
         ('cash', 'Наличные'),
         ('transfer', 'Перевод'),
@@ -51,9 +52,11 @@ class Payments(models.Model):
         max_length=15,
         choices=PAYMENT_METHOD_CHOICES,
         verbose_name="Метод оплаты",
-        help_text="Выберите метод оплаты: наличные или перевод.",
+        help_text="Выберите метод оплаты: наличные или перевод",
         default='transfer'
     )
+    session_id = models.CharField(max_length=255, verbose_name="id сессии", blank=True, null=True)
+    link = models.URLField(max_length=400, verbose_name="ссылка на оплату", blank=True, null=True)
 
     class Meta:
         verbose_name = 'Платеж'
