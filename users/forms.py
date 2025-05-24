@@ -44,7 +44,6 @@ class UserUpdateForm(StyleFormMixin, ModelForm):
         )
 
 
-
 class PasswordRecoveryForm(StyleFormMixin, forms.Form):
     email = forms.EmailField(label="Укажите Email")
 
