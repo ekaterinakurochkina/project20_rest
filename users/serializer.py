@@ -25,7 +25,7 @@ class PaymentsSerializer(serializers.ModelSerializer):
         """ Проверка, что хотя бы одно из полей course или lesson заполнено. """
         if not data.get('course') and not data.get('lesson'):
             raise serializers.ValidationError("Оплата должна быть привязана либо к курсу, либо к уроку.")
-
+        return data
 
 class UserSerializer(ModelSerializer):
     class Meta:
