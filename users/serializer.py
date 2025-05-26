@@ -18,10 +18,14 @@ class PaymentsSerializer(serializers.ModelSerializer):
             related_payments = obj.lesson.payments.all()  # Получаем все платежи для урока
         else:
             return []  # Возвращаем пустой список, если нет ни курса, ни урока
-
         # Сериализация связанных платежей
         return PaymentsSerializer(related_payments, many=True).data
 
+    def validate(self, data):
+        """ Проверка, что хотя бы одно из полей course или lesson заполнено. """
+        if not data.get('course') and not data.get('lesson'):
+            raise serializers.ValidationError("Оплата должна быть привязана либо к курсу, либо к уроку.")
+        return data
 
 class UserSerializer(ModelSerializer):
     class Meta:
