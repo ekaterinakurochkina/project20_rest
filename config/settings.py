@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -37,11 +38,16 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',  # добавлен для доков по умолчанию
+
     'rest_framework',
+    'django_filters',
+    'rest_framework_simplejwt',
+    # 'drf_yasg',  # добавляем для доков
+    # 'corsheaders',  # добавляем для доков
+
     'users',
     'materials',
-    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',  # добавляем для доков
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -71,12 +78,31 @@ TEMPLATES = [
     },
 ]
 
+TEST = {
+    'NAME': os.getenv('DB_NAME'),
+}
+
 REST_FRAMEWORK = {
+    # Настройки фильтрации
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    # Настройки JWT-токенов
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
+    ],
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination', 'PAGE_SIZE': 3
 }
 
+# Настройки срока действия токенов
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
@@ -139,3 +165,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8000',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",
+]
+
+CORS_ALLOW_ALL_ORIGINS = False
+
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
