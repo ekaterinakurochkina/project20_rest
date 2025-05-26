@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'rest_framework_simplejwt',
-    'drf_yasg',  # добавляем для доков
-    'corsheaders',  # добавляем для доков
+    # 'drf_yasg',  # добавляем для доков
+    # 'corsheaders',  # добавляем для доков
 
     'users',
     'materials',
@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # добавляем для доков
+    # 'corsheaders.middleware.CorsMiddleware',  # добавляем для доков
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -166,15 +166,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000',
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:8000',
+# ]
+#
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://read-and-write.example.com",
+# ]
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://read-and-write.example.com",
-]
-
-CORS_ALLOW_ALL_ORIGINS = False
+# CORS_ALLOW_ALL_ORIGINS = False
 
 STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 
